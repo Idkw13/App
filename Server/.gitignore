@@ -1,0 +1,5 @@
+src/config.js
+/node_modules
+../../../2019/Support CRM/server/.idea
+/package-lock.json
+/.env
