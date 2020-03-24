@@ -56,16 +56,18 @@ export async function signIn (req, res) {
   if (error) return res.status(400).send(error)
 
   const user = await User.findOne({ email })
+  if (!user) return res.status(403).send('Invalid login credentials')
+
   const validPassword = await crypt.compare(password, user.password)
 
-  if (!user || !validPassword) return res.status(403).send('Invalid login credentials')
+  if (!validPassword) return res.status(403).send('Invalid login credentials')
 
   // Create and assign  a token
   const tokens = await updateTokens(user._id)
 
   res.header('Authorization', tokens.accessToken)
 
-  res.status(200).send({
+  return res.status(200).send({
     tokens,
     userId: user._id,
   })
